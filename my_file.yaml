@@ -10,7 +10,5 @@ evaluate:
   label_path: PSNE/datasets/BlogCatalog-dataset/data/group-edges.csv
   save_emb_path: embeddings/blog.emb
   shuffle: 10
-link_prediction:
-  save_emb_path: embeddings/blog.emb
 
 

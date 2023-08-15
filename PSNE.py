@@ -26,15 +26,15 @@ class PSNE_model(BaseModel):
     
     @staticmethod
     def add_args(parser):
-        """Add model-specific arguments to the parser."""
+        
         # fmt: off
         parser.add_argument("--window-size", type=int32, default=10,
                             help="Window size of approximate matrix. Default is 10.")
         parser.add_argument("--num-round", type=int32, default=100,
-                            help="Number of round in NetSMF. Default is 100.")
+                            help="Number of round in PSNE. Default is 100.")
         parser.add_argument("--worker", type=int32, default=10,
                             help="Number of parallel workers. Default is 10.")
-        parser.add_argument("--hidden-size", type=int32, default=128)
+        parser.add_argument("--emb-size", type=int32, default=128)
         parser.add_argument("--a_decay", type=int32, default=0.1)
         parser.add_argument("--mu", type=int32, default=0.1,
                             help="different datasets should use different mu.")
@@ -182,7 +182,7 @@ class PSNE_model(BaseModel):
     def _get_embedding_rand(self, matrix,):
         # Sparse randomized tSVD for fast embedding
         t1 = time.time()
-        l = matrix.shape[0]  # noqa E741
+        l = matrix.shape[0]  
         smat = sp.csc_matrix(matrix,dtype=float16)
         print("svd sparse", smat.data.shape[0] * 1.0 / l ** 2)
         U, Sigma, VT = randomized_svd(smat, n_components=self.dimension, n_iter=5, random_state=None)
@@ -220,7 +220,7 @@ class PSNE_model(BaseModel):
             if not self.is_directed and np.random.rand() > 0.5:
                 v, u = u, v
             for k in range(1, self.window_size + 1):
-                r = self.get_lengthofstep(arr, value_list)  # 得到对应的采样长度
+                r = self.get_lengthofstep(arr, value_list)  
                 u_, v_, zp = self._path_sampling(u, v, r)
                 matrix[u_, v_] += 2 * r / self.num_round / self.window_size / zp
         return matrix
@@ -228,7 +228,7 @@ class PSNE_model(BaseModel):
     def get_lengthofstep(self, arr, value_list):
         num_random = random.random()
         sum_of_value = 0
-        for index, value in enumerate(arr):  # 判断输出哪一个
+        for index, value in enumerate(arr):  
             if sum_of_value > num_random:
                 return value_list[index - 1]
             else:
@@ -237,16 +237,16 @@ class PSNE_model(BaseModel):
     
     def get_arr_value_list(self):
         a = self.a_decay
-        ar = []  # 申请一个ar系数列表
-        for i in range(1, self.window_size + 1):  # 计算每个系数大小填充系数列表
-            ar.append(a * pow(1 - a, i))  # ar是系数列表，a是衰减因子
+        ar = []  
+        for i in range(1, self.window_size + 1):  
+            ar.append(a * pow(1 - a, i))  
         ar = np.array(ar)
 
-        ar = ar / sum(ar)  # 归一化ar系数列表然后再令它的和为1
+        ar = ar / sum(ar)  
         ar = list(ar)
         value_list = []
         count = 1
-        for i in ar:  # 建立对应的列表，值为对应的长度
+        for i in ar:  
             value_list.append(count)
             count += 1
         return ar, value_list

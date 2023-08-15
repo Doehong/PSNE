@@ -2,41 +2,27 @@
 implementations of the model proposed in the paper:
 PSNE: Scaling Structure-aware Network Embedding
 via Spectral Sparsification
-## Run the code
-The easiest way to get started is by looking at the notebook `simple_example_tensorflow.ipynb` or `simple_example_pytorch.ipynb`. The notebook `reproduce_results.ipynb` shows how to reproduce the results from the paper.
-
 ## Requirements
-The repository uses these packages:
-
+Start with conda 
+```bash
+conda create -n your_env_name python=3.8.16
 ```
-numpy
-scipy
-tensorflow>=1.6,<2.0
-pytorch>=1.5
+Please install dependencies by
+```bash
+pip install -r requirements.txt
 ```
-
-You can install all requirements via `pip install -r requirements.txt`.
-However, in practice you will only need either TensorFlow or PyTorch, depending on which implementation you use.
-If you use the `networkx_to_sparsegraph` method for importing other datasets you will additionally need NetworkX.
-
-## Installation
-To install the package, run `python setup.py install`.
 
 ## Datasets
-In the `data` folder you can find several datasets. If you want to use other (external) datasets, you can e.g. use the `networkx_to_sparsegraph` method in `ppnp.data.io` for converting NetworkX graphs to our SparseGraph format.
-
-The Cora-ML graph was extracted by Aleksandar Bojchevski, and Stephan Günnemann. *"Deep gaussian embedding of attributed graphs: Unsupervised inductive learning via ranking."* ICLR 2018,   
-while the raw data was originally published by Andrew Kachites McCallum, Kamal Nigam, Jason Rennie, and Kristie Seymore. *"Automating the construction of internet portals with machine learning."* Information Retrieval, 3(2):127–163, 2000.
-
-The Citeseer graph was originally published by Prithviraj Sen, Galileo Namata, Mustafa Bilgic, Lise Getoor, Brian Gallagher, and Tina Eliassi-Rad.
-*"Collective Classification in Network Data."* AI Magazine, 29(3):93–106, 2008.
-
-The PubMed graph was originally published by Galileo Namata, Ben London, Lise Getoor, and Bert Huang. *"Query-driven Active Surveying for Collective Classification"*.  International Workshop on Mining and Learning with Graphs (MLG) 2012.
-
-The Microsoft Academic graph was originally published by Oleksandr Shchur, Maximilian Mumme, Aleksandar Bojchevski, Stephan Günnemann. *"Pitfalls of Graph Neural Network Evaluation"*. Relational Representation Learning Workshop (R2L), NeurIPS 2018.
-
-## Contact
-Please contact j.gasteiger@in.tum.de in case you have any questions.
-
+- PPI contains 3,890 nodes, 76,584 edges and 50 labels.
+- Wikipedia contains 4,777 nodes, 184,812 edges and 40 labels.
+- Blogcatalog contains 10,312 nodes, 333,983 edges and 39 labels.
+- Flickr contains  80,513 nodes, 5,899,882 edges and 195 labels. 
+- Youtube contains 1,138,499 nodes, 2,990,443 edges and 47 labels.
+## Run
+```bash
+python main.py
+```
+## Hyperparameter modification and choose datasets
+All parameters are read from my_file.yaml, you can directly modify the parameters and the url of the dataset in my_file.yaml
 ## Cite
 Please cite our paper if you use the model or this code in your own work:
