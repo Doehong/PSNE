@@ -101,8 +101,6 @@ class PSNE_model(BaseModel):
 
         t = time.time()
         print("alias_nodes", t - s)
-
-        # run netsmf algorithm with multiprocessing and apply randomized svd
         print("number of sample edges ", self.num_round * self.num_edge * self.window_size)
         print("random walk start...")
         t0 = time.time()
