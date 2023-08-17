@@ -102,9 +102,7 @@ def load_labels_blog(labels_file, nodesize):
         label = sparse.lil_matrix((nodesize, 39))
 
         for i, line in enumerate(context):
-            # print(type(line),line)python classifier.py
             one_line = [int(x) for x in line.split(',')]
-            # print(type(one_line), one_line)
             node_ = one_line.pop(0)
             for label_ in one_line:
                 label[node_-1 , label_-1] = 1
@@ -156,7 +154,7 @@ def _get_label_node_embedding_youtube(labels_file):
                 exis.append(one_line[0]-1)
          for k,value in enumerate(exis):
              lable4exis.update({value:k})
-         print('实际上的label节点个数',len(exis))  
+         
          new_labels_matrix =  sparse.lil_matrix((len(exis), 47))
          
          for i,line in enumerate(context):
@@ -167,27 +165,7 @@ def _get_label_node_embedding_youtube(labels_file):
     return  new_labels_matrix
 
 
-def _get_label_node_embedding_orkut(labels_file):
-    print('start fliter nodes for orkut')
 
-    
-    with open(labels_file) as f:
-         context = f.readlines()
-         for i,line in enumerate(context):
-             one_line = [int(x) for x in line.split(' ')]
-             if one_line[0] not in exis:
-                exis.append(one_line[0])
-        #  for k,value in enumerate(exis):
-        #      lable4exis.update({value:k})
-         print('实际上的label节点个数',len(exis))  
-         new_labels_matrix =  sparse.lil_matrix((len(exis), 100))
-         for i,line in enumerate(context):
-                one_line = [int(x) for x in line.split(' ')]
-                one_line.pop(0)
-                for l in one_line: 
-                    new_labels_matrix[i,l]=1  
-         
-    return  new_labels_matrix
 
 def evaluate(label, emb, shuffle,graph_name):
     plt.close('all')
@@ -195,9 +173,8 @@ def evaluate(label, emb, shuffle,graph_name):
         print('not youtube...')
         features_matrix = load_embeddings(emb)
         nodesize = features_matrix.shape[0]
-    if graph_name=='others':
+    if graph_name=='ppi' or graph_name=='wiki':
         label_matrix = load_labels(label, nodesize)
-        # label_matrix = _load_node2vecPPI_label(label)
     if graph_name=='flickr':
         label_matrix = load_labels_flickr(label, nodesize)
     if graph_name=='youtube':
@@ -207,11 +184,6 @@ def evaluate(label, emb, shuffle,graph_name):
         nodesize = features_matrix.shape[0]
     if graph_name=='blog':
         label_matrix = load_labels_blog(label, nodesize)
-    if graph_name=='orkut':
-        print('is orkut...')
-        label_matrix = _get_label_node_embedding_orkut(label)
-        features_matrix = load_embeddings4youtube(emb)
-        
     number_shuffles = shuffle
     print(features_matrix.shape)
     print(label_matrix.shape)
@@ -270,10 +242,10 @@ def evaluate(label, emb, shuffle,graph_name):
         print(train_percent, ":", av)
 
     # drawing
-    plt.plot(x_darwing, y_darwing, '^-', color='#F4A460', label="ppr", ms=6, lw=1.8)  # o-:圆形
-    plt.xlabel("Training Ratio", fontsize=18)  # 横坐标名字
-    plt.ylabel("Micro-F1", fontsize=18)  # 纵坐标名字
-    plt.legend(loc="lower right", fontsize=15)  # 图例
+    plt.plot(x_darwing, y_darwing, '^-', color='#F4A460', label="ppr", ms=6, lw=1.8)  
+    plt.xlabel("Training Ratio", fontsize=18)  
+    plt.ylabel("Micro-F1", fontsize=18)  
+    plt.legend(loc="lower right", fontsize=15)  
     plt.tick_params(labelsize=13)
     plt.grid()
     return plt
@@ -291,5 +263,5 @@ def parse_args():
 
 
 if __name__ == '__main__':
-    evaluate('/home/star/linlonglong/new_mode/data/BlogCatalog-dataset/data/group-edges.csv',
-             '/home/star/linlonglong/new_mode/embeddings/lemane/lemane-BlogCatalog-output.txt', 10, "blog")
+    evaluate('BlogCatalog-dataset/data/group-edges.csv',
+             'BlogCatalog-output.txt', 10, "blog")
