@@ -126,21 +126,7 @@ def _load_node2vecPPI_label(labels_file):
     print('load done')
 
     return label
-def load_labels_orkut(labels_file):
-    # load label from label file, which each line i contains all node who have label i
-    with open(labels_file) as f:
-        context = f.readlines()
-        print('node number: ', len(context))
-        label = sparse.lil_matrix((len(context), 50))
-
-        for i, line in enumerate(context):
-            one_line = [int(x) for x in line.split()]
-            node_ = one_line.pop(0)
-            for label_ in one_line:
-                label[node_, label_] = 1
-    print('load done')
-
-    return label
+    
 def _get_label_node_embedding_youtube(labels_file):
     print('start fliter nodes')
 
